@@ -1,2 +1,2 @@
-# FamilyMenu
-Simple web-based app to allow family members to plan a weekly menu by voting on available options
+# FamilyPlanner
+Simple web-based app to help family members to plan various family-related elements such as weekly dinner menus, outings, chores
