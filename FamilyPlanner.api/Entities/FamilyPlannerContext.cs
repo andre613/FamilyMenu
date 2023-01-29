@@ -24,11 +24,11 @@ namespace FamilyPlanner.api.Entities
         {}
     }
 
-    public class FamilyPlannerContext : DbContext
+    public class FamilyPlannerDataContext : DbContext
     {
-        public DbSet<Meal> Meals { get; set; }
+        public virtual DbSet<Meal> Meals { get; set; }
 
-        public FamilyPlannerContext(DbContextOptions options): base(options) { }
+        public FamilyPlannerDataContext(DbContextOptions options): base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         { }

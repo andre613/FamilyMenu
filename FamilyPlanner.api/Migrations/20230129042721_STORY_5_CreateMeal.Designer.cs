@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FamilyPlanner.api.Migrations
 {
-    [DbContext(typeof(FamilyPlannerContext))]
+    [DbContext(typeof(FamilyPlannerDataContext))]
     [Migration("20230129042721_STORY_5_CreateMeal")]
     partial class STORY5CreateMeal
     {

@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace FamilyPlanner.api.Migrations
 {
-    [DbContext(typeof(FamilyPlannerContext))]
+    [DbContext(typeof(FamilyPlannerDataContext))]
     partial class FamilyPlannerContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)
