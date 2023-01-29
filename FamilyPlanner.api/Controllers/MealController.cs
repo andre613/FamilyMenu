@@ -1,4 +1,5 @@
 ﻿using FamilyPlanner.api.Entities;
+using FamilyPlanner.api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FamilyPlanner.api.Controllers
@@ -7,5 +8,17 @@ namespace FamilyPlanner.api.Controllers
     [Route("[controller]")]
     public class MealController : ControllerBase
     {
+        private readonly IRepository<Meal> _mealRepository;
+
+        public MealController(IRepository<Meal> mealRepository)
+        {
+            _mealRepository = mealRepository;
+        }
+
+        [HttpPost(Name = "PostMeal")]
+        public Meal Post(Meal meal) 
+        {
+            return _mealRepository.Add(meal);
+        }
     }
 }

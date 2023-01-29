@@ -68,7 +68,7 @@ namespace FamilyPlanner.api.Entities
 
             modelBuilder.Entity<Meal>()
                 .HasMany(m => m.GroceryListItems)
-                .WithOne(gli => gli.Meal)
+                .WithOne()
                 .HasForeignKey(gli => gli.MealId);
         }
     }
