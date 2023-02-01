@@ -6,11 +6,11 @@ namespace FamilyPlanner.api.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class MealController : ControllerBase
+    public class MealsController : ControllerBase
     {
         private readonly IRepository<Meal> _mealRepository;
 
-        public MealController(IRepository<Meal> mealRepository)
+        public MealsController(IRepository<Meal> mealRepository)
         {
             _mealRepository = mealRepository;
         }

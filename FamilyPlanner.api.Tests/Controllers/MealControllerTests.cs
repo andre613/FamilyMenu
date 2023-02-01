@@ -25,17 +25,17 @@ namespace FamilyPlanner.api.Tests.Controllers
         [TestMethod]
         public void ConstructorReturnsMealController()
         {
-            var mealController = new MealController(_mockRepository.Object);
+            var mealController = new MealsController(_mockRepository.Object);
             
             Assert.IsNotNull(mealController);
-            Assert.IsInstanceOfType<MealController>(mealController);
+            Assert.IsInstanceOfType<MealsController>(mealController);
         }
 
         [TestMethod]
         public void PostReturnsMealObject()
         {
             _mockRepository.Setup(mr => mr.Add(It.IsAny<Meal>())).Returns(_fixture.Create<Meal>());
-            var mealController = new MealController(_mockRepository.Object);
+            var mealController = new MealsController(_mockRepository.Object);
             
             var newMeal = _fixture.Build<Meal>()
                 .Without(m => m.Id)
@@ -52,7 +52,7 @@ namespace FamilyPlanner.api.Tests.Controllers
         {
 
             _mockRepository.Setup(mr => mr.Add(It.IsAny<Meal>())).Returns(_fixture.Create<Meal>());
-            var mealController = new MealController(_mockRepository.Object);
+            var mealController = new MealsController(_mockRepository.Object);
 
             var newMeal = _fixture.Build<Meal>()
                 .Without(m => m.Id)
