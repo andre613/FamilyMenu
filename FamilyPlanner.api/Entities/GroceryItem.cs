@@ -1,4 +1,6 @@
-﻿namespace FamilyPlanner.api.Entities
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace FamilyPlanner.api.Entities
 {
     public enum GroceryDepartment
     {
@@ -14,6 +16,7 @@
 
     public class GroceryItem : BaseEntity
     {
+        [Required]
         public string Name { get; set; } = null!;
 
         public GroceryDepartment? GroceryDepartment { get; set; }
