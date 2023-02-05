@@ -1,4 +1,4 @@
-﻿using FamilyPlanner.api.Entities;
+﻿using FamilyPlanner.Common.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace FamilyPlanner.api.Repositories.Implementations

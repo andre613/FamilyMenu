@@ -1,4 +1,4 @@
-﻿using FamilyPlanner.api.Entities;
+﻿using FamilyPlanner.Common.Entities;
 using FamilyPlanner.api.Repositories;
 using Microsoft.AspNetCore.Mvc;
 

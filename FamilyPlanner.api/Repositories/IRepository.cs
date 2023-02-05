@@ -1,4 +1,4 @@
-﻿using FamilyPlanner.api.Entities;
+﻿using FamilyPlanner.Common.Entities;
 
 namespace FamilyPlanner.api.Repositories
 {

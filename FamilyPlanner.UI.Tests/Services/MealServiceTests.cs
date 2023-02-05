@@ -1,5 +1,5 @@
 ﻿using AutoFixture;
-using FamilyPlanner.api.Entities;
+using FamilyPlanner.Common.Entities;
 using FamilyPlanner.UI.Services.Implementations;
 using Moq;
 using Moq.Protected;

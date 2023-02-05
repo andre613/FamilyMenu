@@ -1,4 +1,4 @@
-﻿namespace FamilyPlanner.api.Entities
+﻿namespace FamilyPlanner.Common.Entities
 {
     public class BaseEntity
     {

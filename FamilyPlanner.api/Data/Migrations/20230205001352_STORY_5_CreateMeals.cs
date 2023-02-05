@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace FamilyPlanner.api.Migrations
+namespace FamilyPlanner.api.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class STORY5CreateMeal : Migration
+    public partial class STORY5CreateMeals : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -40,7 +40,7 @@ namespace FamilyPlanner.api.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Description = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    RecipeUri = table.Column<string>(type: "longtext", nullable: false)
+                    RecipeUri = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     MealTypes = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")

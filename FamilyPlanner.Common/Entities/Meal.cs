@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace FamilyPlanner.api.Entities
+namespace FamilyPlanner.Common.Entities
 {
     public enum MealType
     {

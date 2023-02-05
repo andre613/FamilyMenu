@@ -1,6 +1,6 @@
 ﻿using AutoFixture;
 using FamilyPlanner.api.Controllers;
-using FamilyPlanner.api.Entities;
+using FamilyPlanner.Common.Entities;
 using FamilyPlanner.api.Repositories;
 using Moq;
 

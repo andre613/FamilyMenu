@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FamilyPlanner.UI", "FamilyP
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FamilyPlanner.api.Tests", "FamilyPlanner.api.Tests\FamilyPlanner.api.Tests.csproj", "{42B65AEB-E3BB-4308-956A-715496DECD63}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FamilyPlanner.UI.Tests", "FamilyPlanner.UI.Tests\FamilyPlanner.UI.Tests.csproj", "{AEFE39DA-733F-4A24-989F-76614C216E96}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FamilyPlanner.UI.Tests", "FamilyPlanner.UI.Tests\FamilyPlanner.UI.Tests.csproj", "{AEFE39DA-733F-4A24-989F-76614C216E96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FamilyPlanner.Common", "FamilyPlanner.Common\FamilyPlanner.Common.csproj", "{8CC1B4CD-DA69-4943-9823-E8C436F8DDA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{AEFE39DA-733F-4A24-989F-76614C216E96}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEFE39DA-733F-4A24-989F-76614C216E96}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEFE39DA-733F-4A24-989F-76614C216E96}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8CC1B4CD-DA69-4943-9823-E8C436F8DDA6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8CC1B4CD-DA69-4943-9823-E8C436F8DDA6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8CC1B4CD-DA69-4943-9823-E8C436F8DDA6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8CC1B4CD-DA69-4943-9823-E8C436F8DDA6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
