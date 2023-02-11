@@ -56,11 +56,6 @@ namespace FamilyPlanner.Common.Entities
             modelBuilder.Entity<Meal>()
                 .Property(m => m.Id)
                 .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<Meal>()
-                .Property(m => m.MealTypes)
-                .HasConversion(new EnumCollectionJsonValueConverter<MealType>())
-                .Metadata.SetValueComparer(new CollectionValueComparer<MealType>());
                 
             modelBuilder.Entity<Meal>()
                 .HasKey(m => m.Id);

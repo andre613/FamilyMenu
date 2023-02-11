@@ -90,7 +90,7 @@ namespace FamilyPlanner.UI.Tests.Services
 
             }).Verifiable();
 
-            _mockHttpClientFactory.Setup(mhcf => mhcf.CreateClient("FamilyPlanner.API"))
+            _mockHttpClientFactory.Setup(mhcf => mhcf.CreateClient("FamilyPlanner.Api"))
                 .Returns(() =>
                 {
                     return new HttpClient(mockHttpMessageHandler.Object)
@@ -107,7 +107,7 @@ namespace FamilyPlanner.UI.Tests.Services
                 .Create()
             );
 
-            _mockHttpClientFactory.Verify(mhcf => mhcf.CreateClient("FamilyPlanner.API"), Times.Once);
+            _mockHttpClientFactory.Verify(mhcf => mhcf.CreateClient("FamilyPlanner.Api"), Times.Once);
             mockHttpMessageHandler.Verify();
         }
     }

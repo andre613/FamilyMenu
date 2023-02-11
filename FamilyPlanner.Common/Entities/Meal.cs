@@ -2,13 +2,14 @@
 
 namespace FamilyPlanner.Common.Entities
 {
+    [Flags]
     public enum MealType
     {
-        Breakfast,
-        Lunch,
-        Dinner,
-        Snack,
-        Other
+        Other = 1,
+        Breakfast = 2,
+        Lunch = 4,
+        Dinner = 8,
+        Snack = 16
     }
 
     public class Meal : BaseEntity
@@ -19,10 +20,11 @@ namespace FamilyPlanner.Common.Entities
         [Required]
         public string Description { get; set; } = null!;
 
+        [Url]
         public string? RecipeUri { get; set;} = null;
 
-        public virtual ICollection<MealType> MealTypes { get; set; } = new List<MealType>();
+        public MealType? MealType { get; set; } = null;
 
-        public virtual ICollection<GroceryListItem> GroceryListItems { get; set; } = new List<GroceryListItem>();
+        public virtual IList<GroceryListItem> GroceryListItems { get; set; } = new List<GroceryListItem>();
     }
 }
