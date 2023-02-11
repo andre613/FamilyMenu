@@ -75,9 +75,8 @@ namespace FamilyPlanner.api.Data.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("MealTypes")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int?>("MealType")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()

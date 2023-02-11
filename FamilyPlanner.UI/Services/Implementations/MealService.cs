@@ -13,7 +13,7 @@ namespace FamilyPlanner.UI.Services.Implementations
 
         public async Task<Meal?> AddMeal(Meal meal)
         {
-            using (var httpClient = _httpClientFactory.CreateClient("FamilyPlanner.API"))
+            using (var httpClient = _httpClientFactory.CreateClient("FamilyPlanner.Api"))
             {
                 if(httpClient.BaseAddress == null)
                 {

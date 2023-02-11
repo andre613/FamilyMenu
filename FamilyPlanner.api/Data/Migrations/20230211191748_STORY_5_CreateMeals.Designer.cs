@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FamilyPlanner.api.Data.Migrations
 {
     [DbContext(typeof(FamilyPlannerDataContext))]
-    [Migration("20230205001352_STORY_5_CreateMeals")]
+    [Migration("20230211191748_STORY_5_CreateMeals")]
     partial class STORY5CreateMeals
     {
         /// <inheritdoc />
@@ -78,9 +78,8 @@ namespace FamilyPlanner.api.Data.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("MealTypes")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<int?>("MealType")
+                        .HasColumnType("int");
 
                     b.Property<string>("Name")
                         .IsRequired()
