@@ -3,12 +3,11 @@
 @using FamilyPlanner.UI.Services;
 @using FamilyPlanner.Common.Entities;
 @using FamilyPlanner.UI.Helpers;
-@using System.Linq;
 @using System.Collections.Generic;
-@using System;
-
+@using System.Linq;
 
 @inject IMealService MealService;
+@inject IToastService ToastService;
 
 <PageTitle>Add Meal</PageTitle>
 
@@ -86,7 +85,16 @@
     private async Task SaveMeal()
     {
         _meal.MealType = (MealType)_selectedMealTypes.Where(smt => smt.IsChecked)?.Sum(smt => (long?)smt.EnumValue)!;
-        _meal = (await MealService.AddMeal(_meal))!;
+
+        try
+        {
+            _meal = (await MealService.AddMeal(_meal))!;
+            ToastService.ShowSuccess($"{_meal.Name} Saved.");
+        }
+        catch(Exception e)
+        {
+            
+        }
     }
 
     private void Cancel()

@@ -1,4 +1,5 @@
 
+using Blazored.Toast;
 using FamilyPlanner.UI.Services;
 using FamilyPlanner.UI.Services.Implementations;
 
@@ -18,6 +19,7 @@ if (!Uri.TryCreate(familyPlannerApiUriString, UriKind.Absolute, out var familyPl
 // Add services to the container.
 builder.Services
     .AddTransient<IMealService, MealService>()
+    .AddBlazoredToast()
     .AddHttpClient("FamilyPlanner.Api", c => c.BaseAddress = familyPlannerApiUri);
 
 
