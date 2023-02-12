@@ -15,6 +15,12 @@ namespace FamilyPlanner.api.Controllers
             _mealRepository = mealRepository;
         }
 
+        [HttpGet(Name ="GetMeals")]
+        public List<Meal> GetMeals() 
+        {
+            return _mealRepository.GetAll().ToList();
+        }
+
         [HttpPost(Name = "PostMeal")]
         public Meal Post(Meal meal) 
         {

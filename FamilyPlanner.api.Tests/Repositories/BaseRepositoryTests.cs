@@ -1,6 +1,7 @@
 ﻿using AutoFixture;
-using FamilyPlanner.Common.Entities;
 using FamilyPlanner.api.Repositories.Implementations;
+using FamilyPlanner.api.Tests.Helpers;
+using FamilyPlanner.Common.Entities;
 using Microsoft.EntityFrameworkCore;
 using Moq;
 
@@ -37,11 +38,49 @@ namespace FamilyPlanner.api.Tests.Repositories
         [TestMethod]
         public void GetAllReturnsListOfCorrectType()
         {
+            var mockDbContext = CreateMockFamilyPlannerDataContext();
+
+            mockDbContext
+                .Setup(mdc => mdc.Set<Meal>())
+                .Returns(CreateMockDbSet(new List<Meal>()).Object)
+                .Verifiable();
+
+            _mockDbContextFactory
+                .Setup(mdcf => mdcf.CreateDbContext())
+                .Returns(mockDbContext.Object)
+                .Verifiable();
+
             var repository = new BaseRepository<Meal>(_mockDbContextFactory.Object);
             var actual = repository.GetAll();
 
             Assert.IsNotNull(actual);
             Assert.IsInstanceOfType<List<Meal>>(actual);
+        }
+
+        [TestMethod]
+        public void GetAllReturnsCorrectData()
+        {
+            var data = _fixture
+                .CreateMany<Meal>()
+                .ToList();
+
+            var mockDbSet = CreateMockDbSet(data);
+            var mockDbContext = CreateMockFamilyPlannerDataContext();
+
+            mockDbContext
+                .Setup(mdc => mdc.Set<Meal>())
+                .Returns(mockDbSet.Object)
+                .Verifiable();
+
+            _mockDbContextFactory
+                .Setup(mdcf => mdcf.CreateDbContext())
+                .Returns(mockDbContext.Object)
+                .Verifiable();
+
+            var repository = new BaseRepository<Meal>(_mockDbContextFactory.Object);
+            var actual = repository.GetAll();
+
+            ObjectsComparerHelper.AssertAreEqual(data, actual);
         }
 
         [TestMethod]

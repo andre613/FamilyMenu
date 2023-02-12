@@ -25,7 +25,14 @@ namespace FamilyPlanner.api.Repositories.Implementations
 
         public ICollection<T> GetAll()
         {
-            return new List<T>();
+            DbSet<T> dbSet;
+
+            using (var dbContext = _dbContextFactory.CreateDbContext())
+            {
+                dbSet = dbContext.Set<T>();
+            }
+
+            return dbSet.ToList();
         }
     }
 }
