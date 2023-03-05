@@ -10,17 +10,18 @@ namespace FamilyPlanner.api.Tests.Repositories
     [TestClass]
     public class BaseRepositoryTests : TestBase
     {
-        private readonly Mock<FamilyPlannerDataContext> _mockDbContext;
-        private readonly Mock<IDbContextFactory<FamilyPlannerDataContext>> _mockDbContextFactory;
+        private Mock<FamilyPlannerDataContext> _mockDbContext = null!;
+        private Mock<IDbContextFactory<FamilyPlannerDataContext>> _mockDbContextFactory = null!;
 
-        public BaseRepositoryTests() 
+        [TestInitialize]
+        public void TestInitialize()
         {
             _mockDbContext = CreateMockFamilyPlannerDataContext();
             _mockDbContextFactory = CreateMockFamilyPlannerDataContextFactory(_mockDbContext);
         }
 
         [TestCleanup]
-        public void Cleanup()
+        public void TestCleanup()
         {
             _mockDbContext.Reset();
             _mockDbContextFactory.Reset();
@@ -98,10 +99,16 @@ namespace FamilyPlanner.api.Tests.Repositories
         [TestMethod]
         public void AddProperlySavesToDB()
         {
-            _mockDbContext.Setup(mdc => mdc.Add(It.IsAny<Meal>()));
+            _mockDbContext.Setup(mdc => 
+                mdc.Add(It.IsAny<Meal>()))
+                .Callback<Meal>(m => 
+                    m.Id = _fixture.Create<uint>());
 
             var repository = new BaseRepository<Meal>(_mockDbContextFactory.Object);
-            var newMeal = _fixture.Create<Meal>();
+            
+            var newMeal = _fixture.Build<Meal>()
+                .Without(m => m.Id)
+                .Create();
 
             var actual = repository.Add(newMeal);
 
@@ -109,7 +116,70 @@ namespace FamilyPlanner.api.Tests.Repositories
             _mockDbContext.Verify(mdc => mdc.SaveChanges(), Times.Once());
         }
 
-        private Mock<DbSet<Meal>> CreateMockDbSet(List<Meal> data)
+        [TestMethod]
+        public void UpdateProperlySavesToDB()
+        {
+            var data =
+                _fixture
+                    .CreateMany<Meal>()
+                    .ToList();
+
+            data.Add(
+                _fixture
+                    .Build<Meal>()
+                    .With(m => m.Id, 123u)
+                    .Create());
+
+            _mockDbContext
+                .Setup(mdc => mdc.Set<Meal>())
+                .Returns(CreateMockDbSet(data).Object);
+
+            var repository = new BaseRepository<Meal>(_mockDbContextFactory.Object);
+
+            var updatedMeal = new Meal
+            {
+                Id = 123u,
+                Description = "Updated Description",
+                MealType = MealType.Snack,
+                Name = "Updated Name",
+                RecipeUri = "http://google.ca"
+            };
+
+            repository.Update(updatedMeal);
+
+            _mockDbContext.Verify(mdc => mdc.Set<Meal>(), Times.Once);
+            _mockDbContext.Verify(mdc => mdc.UpdateEntity(It.IsAny<Meal>(), It.IsAny<Meal>()), Times.Once);
+        }
+
+        [TestMethod]
+        public void UpdateThrowsCorrectExceptionIfIdNotExist()
+        {
+            var data =
+                _fixture
+                    .Build<Meal>()
+                    .With(m => m.Id, _fixture.Create<uint>() + 123u)
+                    .CreateMany()
+                    .ToList();
+
+            _mockDbContext
+                .Setup(mdc => mdc.Set<Meal>())
+                .Returns(CreateMockDbSet(data).Object);
+
+            var repository = new BaseRepository<Meal>(_mockDbContextFactory.Object);
+
+            var updatedMeal = new Meal
+            {
+                Id = 123u,
+                Description = "Updated Description",
+                MealType = MealType.Snack,
+                Name = "Updated Name",
+                RecipeUri = "http://google.ca"
+            };
+
+            Assert.ThrowsException<EntityNotFoundException<Meal>>(() => repository.Update(updatedMeal));
+        }
+
+        private static Mock<DbSet<Meal>> CreateMockDbSet(List<Meal> data)
         {
             var dataAsQueryable = data.AsQueryable();
             var mockDbSet = new Mock<DbSet<Meal>>();

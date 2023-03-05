@@ -85,7 +85,18 @@ namespace FamilyPlanner.api.Tests.Controllers
 
             var actual = mealsController.Post(newMeal);
 
-            _mockRepository.Verify(mr => mr.Add(It.IsAny<Meal>()), Times.Once);
+            _mockRepository.Verify(mr => mr.Add(newMeal), Times.Once);
+        }
+
+        [TestMethod]
+        public void PutProperlySavesToRepostory()
+        {
+            var mealsController = new MealsController(_mockRepository.Object);
+            var updatedMeal = _fixture.Create<Meal>();
+
+            mealsController.Put(updatedMeal);
+
+            _mockRepository.Verify(mr => mr.Update(updatedMeal), Times.Once);
         }
     }
 }

@@ -3,6 +3,11 @@ using Microsoft.EntityFrameworkCore;
 
 namespace FamilyPlanner.api.Repositories.Implementations
 {
+    public class EntityNotFoundException<T> : Exception where T : BaseEntity
+    {
+        public EntityNotFoundException(string message) : base(message) { }
+    }
+
     public class BaseRepository<T> : IRepository<T> where T : BaseEntity
     {
         private readonly IDbContextFactory<FamilyPlannerDataContext> _dbContextFactory;
@@ -33,6 +38,14 @@ namespace FamilyPlanner.api.Repositories.Implementations
             }
 
             return dbSet.ToList();
+        }
+
+        public void Update(T entity)
+        {
+            using var dbContext = _dbContextFactory.CreateDbContext();
+            var entityToUpdate = dbContext.Set<T>().SingleOrDefault(x => x.Id == entity.Id) ?? 
+                throw new EntityNotFoundException<T>($"Unable to perform update.\nEntity of type {typeof(T).Name} with ID {entity.Id} not found.");
+            dbContext.UpdateEntity(entityToUpdate, entity);
         }
     }
 }

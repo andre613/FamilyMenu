@@ -29,6 +29,11 @@ namespace FamilyPlanner.Common.Entities
 
         public FamilyPlannerDataContext(DbContextOptions options): base(options) { }
 
+        public virtual void UpdateEntity(object entityToUpdate, object newValues)
+        {
+            Entry(entityToUpdate).CurrentValues.SetValues(newValues);
+        }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         { }
 

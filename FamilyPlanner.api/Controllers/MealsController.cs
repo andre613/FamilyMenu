@@ -26,5 +26,11 @@ namespace FamilyPlanner.api.Controllers
         {
             return _mealRepository.Add(meal);
         }
+
+        [HttpPut(Name = "PutMeal")]
+        public void Put(Meal meal)
+        {
+            _mealRepository.Update(meal);
+        }
     }
 }

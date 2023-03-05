@@ -7,5 +7,7 @@ namespace FamilyPlanner.api.Repositories
         ICollection<T> GetAll();
 
         T Add(T entity);
+
+        void Update(T entity);
     }
 }
