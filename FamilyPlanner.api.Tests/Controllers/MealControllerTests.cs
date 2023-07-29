@@ -4,6 +4,10 @@ using FamilyPlanner.Common.Entities;
 using FamilyPlanner.api.Repositories;
 using Moq;
 using FamilyPlanner.api.Tests.Helpers;
+using FamilyPlanner.api.Repositories.Implementations;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 
 namespace FamilyPlanner.api.Tests.Controllers
 {
@@ -41,7 +45,10 @@ namespace FamilyPlanner.api.Tests.Controllers
             var actual = mealsController.GetMeals();
 
             Assert.IsNotNull(actual);
-            Assert.IsInstanceOfType<List<Meal>>(actual);
+            var result = actual!.Result as OkObjectResult;
+
+            Assert.AreEqual(StatusCodes.Status200OK, result!.StatusCode);
+            Assert.IsInstanceOfType<List<Meal>>(result.Value);
         }
 
         [TestMethod]
@@ -52,8 +59,10 @@ namespace FamilyPlanner.api.Tests.Controllers
             var mealsController = new MealsController(_mockRepository.Object);
 
             var actual = mealsController.GetMeals();
+            var result = actual!.Result as OkObjectResult;
 
-            ObjectsComparerHelper.AssertAreEqual(data, actual);
+            Assert.AreEqual(StatusCodes.Status200OK, result!.StatusCode);
+            ObjectsComparerHelper.AssertAreEqual(data, result!.Value);
         }
 
         [TestMethod]
@@ -66,10 +75,10 @@ namespace FamilyPlanner.api.Tests.Controllers
                 .Without(m => m.Id)
                 .Create();
 
-            var actual = mealsController.Post(newMeal);
+            var actual = mealsController.PostMeal(newMeal);
 
             Assert.IsNotNull(actual);
-            Assert.IsInstanceOfType<Meal>(actual);
+            Assert.IsInstanceOfType<ActionResult<Meal>>(actual);
         }
 
         [TestMethod]
@@ -83,20 +92,43 @@ namespace FamilyPlanner.api.Tests.Controllers
                 .Without(m => m.Id)
                 .Create();
 
-            var actual = mealsController.Post(newMeal);
+            var actual = mealsController.PostMeal(newMeal);
 
             _mockRepository.Verify(mr => mr.Add(newMeal), Times.Once);
         }
 
         [TestMethod]
-        public void PutProperlySavesToRepostory()
+        public void PutProperlySavesToRepository()
         {
             var mealsController = new MealsController(_mockRepository.Object);
             var updatedMeal = _fixture.Create<Meal>();
 
-            mealsController.Put(updatedMeal);
-
+            var actual = mealsController.PutMeal(updatedMeal);
             _mockRepository.Verify(mr => mr.Update(updatedMeal), Times.Once);
+
+            var result = actual.Result as AcceptedResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(StatusCodes.Status202Accepted, result!.StatusCode);
+            Assert.IsTrue(result.Location!.Equals($"Meals/{updatedMeal.Id}"));
+        }
+
+        [TestMethod]
+        public void PutReturnsNotFoundIfIdNotExists()
+        {
+            var updatedMeal = _fixture.Create<Meal>();
+            
+            _mockRepository
+                .Setup(mr => mr.Update(updatedMeal))
+                .Throws<EntityNotFoundException<Meal>>();
+
+            var mealsController = new MealsController(_mockRepository.Object);
+
+            var actual = mealsController.PutMeal(updatedMeal);
+            var result = actual.Result as NotFoundObjectResult;
+
+            Assert.IsNotNull(result);
+            Assert.AreEqual(StatusCodes.Status404NotFound, result!.StatusCode);
         }
     }
 }

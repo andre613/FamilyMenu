@@ -8,6 +8,6 @@ namespace FamilyPlanner.api.Repositories
 
         T Add(T entity);
 
-        void Update(T entity);
+        T Update(T entity);
     }
 }

@@ -1,6 +1,8 @@
 ﻿using FamilyPlanner.Common.Entities;
 using FamilyPlanner.api.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http.HttpResults;
+using FamilyPlanner.api.Repositories.Implementations;
 
 namespace FamilyPlanner.api.Controllers
 {
@@ -16,21 +18,31 @@ namespace FamilyPlanner.api.Controllers
         }
 
         [HttpGet(Name ="GetMeals")]
-        public List<Meal> GetMeals() 
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public ActionResult<List<Meal>> GetMeals() 
         {
-            return _mealRepository.GetAll().ToList();
+            var meals = _mealRepository.GetAll().ToList();
+            return Ok(meals);
         }
 
         [HttpPost(Name = "PostMeal")]
-        public Meal Post(Meal meal) 
+        public ActionResult<Meal> PostMeal(Meal meal) 
         {
-            return _mealRepository.Add(meal);
+            var newMeal = _mealRepository.Add(meal);
+            return Created($"Meals/{newMeal.Id}", newMeal);
         }
 
         [HttpPut(Name = "PutMeal")]
-        public void Put(Meal meal)
+        public ActionResult<Meal> PutMeal(Meal meal)
         {
-            _mealRepository.Update(meal);
+            try
+            {
+                return  Accepted($"Meals/{meal.Id}", _mealRepository.Update(meal));
+            }
+            catch(EntityNotFoundException<Meal> ex)
+            {
+                return NotFound(new { Id = meal.Id, error = ex.Message});
+            }
         }
     }
 }

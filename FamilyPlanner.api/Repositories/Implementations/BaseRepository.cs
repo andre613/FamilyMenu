@@ -5,6 +5,8 @@ namespace FamilyPlanner.api.Repositories.Implementations
 {
     public class EntityNotFoundException<T> : Exception where T : BaseEntity
     {
+        public EntityNotFoundException() : base() { }
+
         public EntityNotFoundException(string message) : base(message) { }
     }
 
@@ -40,12 +42,16 @@ namespace FamilyPlanner.api.Repositories.Implementations
             return dbSet.ToList();
         }
 
-        public void Update(T entity)
+        public T Update(T entity)
         {
             using var dbContext = _dbContextFactory.CreateDbContext();
+            
             var entityToUpdate = dbContext.Set<T>().SingleOrDefault(x => x.Id == entity.Id) ?? 
                 throw new EntityNotFoundException<T>($"Unable to perform update.\nEntity of type {typeof(T).Name} with ID {entity.Id} not found.");
+            
             dbContext.UpdateEntity(entityToUpdate, entity);
+
+            return entity;
         }
     }
 }
