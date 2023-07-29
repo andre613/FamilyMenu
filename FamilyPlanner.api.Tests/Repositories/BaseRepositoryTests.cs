@@ -117,6 +117,41 @@ namespace FamilyPlanner.api.Tests.Repositories
         }
 
         [TestMethod]
+        public void UpdateReturnsCorrectType()
+        {
+            var data =
+                _fixture
+                    .CreateMany<Meal>()
+                    .ToList();
+
+            data.Add(
+                _fixture
+                    .Build<Meal>()
+                    .With(m => m.Id, 123u)
+                    .Create());
+
+            _mockDbContext
+                .Setup(mdc => mdc.Set<Meal>())
+                .Returns(CreateMockDbSet(data).Object);
+
+            var repository = new BaseRepository<Meal>(_mockDbContextFactory.Object);
+
+            var updatedMeal = new Meal
+            {
+                Id = 123u,
+                Description = "Updated Description",
+                MealType = MealType.Snack,
+                Name = "Updated Name",
+                RecipeUri = "http://google.ca"
+            };
+
+            var actual = repository.Update(updatedMeal);
+
+            Assert.IsNotNull(actual);
+            Assert.IsInstanceOfType<Meal>(actual);
+        }
+
+        [TestMethod]
         public void UpdateProperlySavesToDB()
         {
             var data =
