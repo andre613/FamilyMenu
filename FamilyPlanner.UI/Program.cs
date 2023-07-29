@@ -1,13 +1,32 @@
-using FamilyPlanner.UI.Data;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+
+using Blazored.Toast;
+using FamilyPlanner.UI.Services;
+using FamilyPlanner.UI.Services.Implementations;
 
 var builder = WebApplication.CreateBuilder(args);
+var familyPlannerApiUriString = builder.Configuration.GetValue<string>("FamilyPlanner.Api");
+
+if (string.IsNullOrWhiteSpace(familyPlannerApiUriString))
+{
+    throw new ArgumentNullException(nameof(familyPlannerApiUriString), "FamilyPlannerApi is not configured. Check appsettings.json file.");
+}
+
+if (!Uri.TryCreate(familyPlannerApiUriString, UriKind.Absolute, out var familyPlannerApiUri))
+{
+    throw new FormatException($"\"{familyPlannerApiUriString}\" is not a valid URI for FamilyPlannerApiUri. Check appsettings.json file.");
+}
 
 // Add services to the container.
+builder.Services
+    .AddTransient<IMealService, MealService>()
+    .AddBlazoredToast()
+    .AddHttpClient("FamilyPlanner.Api", c => c.BaseAddress = familyPlannerApiUri);
+
+
+
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
-builder.Services.AddSingleton<WeatherForecastService>();
+
 
 var app = builder.Build();
 
@@ -19,13 +38,11 @@ if (!app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.UseHttpsRedirection();
-
-app.UseStaticFiles();
-
-app.UseRouting();
-
+app
+    .UseHttpsRedirection()
+    .UseStaticFiles()
+    .UseRouting();
+    
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
-
 app.Run();

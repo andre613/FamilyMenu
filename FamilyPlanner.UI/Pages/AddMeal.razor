@@ -1,0 +1,104 @@
+﻿@page "/meals/add"
+
+@using FamilyPlanner.UI.Services;
+@using FamilyPlanner.Common.Entities;
+@using FamilyPlanner.UI.Helpers;
+@using System.Collections.Generic;
+@using System.Linq;
+
+@inject IMealService MealService;
+@inject IToastService ToastService;
+
+<PageTitle>Add Meal</PageTitle>
+
+<h1>Add Meal</h1>
+
+<EditForm Model="@_meal" OnValidSubmit="SaveMeal">
+
+    <DataAnnotationsValidator />
+    
+    <div class="mb-3">
+        <label for="Name" class="form-label">Name</label>
+        
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="_meal.Name" />
+        </div>
+        
+        <ValidationMessage For="@(() => _meal.Name)" />
+    </div>
+    
+    <div class="mb-3">
+        <label for="Description" class="form-label">Description</label>
+        
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="_meal.Description" />
+        </div>
+        
+        <ValidationMessage For="@(() => _meal.Description)" />
+    </div>
+    
+    <div class="mb-3">
+        <label for="RecipeUri" class="form-label">Recipe URL</label>
+        
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="_meal.RecipeUri" />
+        </div>
+
+        <ValidationMessage For="@(() => _meal.RecipeUri)" />
+    </div>
+    
+    <div class="mb-3">
+        <label for="MealTypes" class="form-label">Meal Type(s)</label>
+        
+        <div class="col-md-4">
+            @foreach (var mealType in _selectedMealTypes)
+            {
+                <label for="mealType" class="form-label">
+                    @mealType.EnumValue.ToString() 
+                    <InputCheckbox @bind-Value="mealType.IsChecked" />
+                </label>
+                
+                <br />
+            }
+        </div>
+
+        <ValidationMessage For="@(() => _meal.MealType)" />
+    </div>
+    
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button class="btn btn-light" @onclick="Cancel">Cancel</button>
+    </div>
+</EditForm>
+
+@code 
+{
+    private Meal _meal = new();
+    private List<CheckableEnum<MealType>> _selectedMealTypes = new();
+
+    protected override void OnInitialized()
+    {
+        var mealTypes = Enum.GetValues(typeof(MealType)).Cast<MealType>().Select(o => (MealType) o).ToList();
+        _selectedMealTypes = mealTypes.Select(mt => new CheckableEnum<MealType>() { EnumValue = mt }).ToList();
+    }
+
+    private async Task SaveMeal()
+    {
+        _meal.MealType = (MealType)_selectedMealTypes.Where(smt => smt.IsChecked)?.Sum(smt => (long?)smt.EnumValue)!;
+
+        try
+        {
+            _meal = (await MealService.AddMeal(_meal))!;
+            ToastService.ShowSuccess($"{_meal.Name} Saved.");
+        }
+        catch(Exception e)
+        {
+            ToastService.ShowError(e.Message);
+        }
+    }
+
+    private void Cancel()
+    {
+        //NavigationManager.NavigateTo("/home");
+    }
+}

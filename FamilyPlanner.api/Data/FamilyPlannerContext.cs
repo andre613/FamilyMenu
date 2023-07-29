@@ -1,10 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Newtonsoft.Json;
 
-namespace FamilyPlanner.api.Entities
+namespace FamilyPlanner.Common.Entities
 {
     public class EnumCollectionJsonValueConverter<T> : ValueConverter<ICollection<T>, string> where T : Enum
     {
@@ -24,11 +23,16 @@ namespace FamilyPlanner.api.Entities
         {}
     }
 
-    public class FamilyPlannerContext : DbContext
+    public class FamilyPlannerDataContext : DbContext
     {
-        public DbSet<Meal> Meals { get; set; }
+        public virtual DbSet<Meal> Meals { get; set; }
 
-        public FamilyPlannerContext(DbContextOptions options): base(options) { }
+        public FamilyPlannerDataContext(DbContextOptions options): base(options) { }
+
+        public virtual void UpdateEntity(object entityToUpdate, object newValues)
+        {
+            Entry(entityToUpdate).CurrentValues.SetValues(newValues);
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         { }
@@ -57,18 +61,13 @@ namespace FamilyPlanner.api.Entities
             modelBuilder.Entity<Meal>()
                 .Property(m => m.Id)
                 .ValueGeneratedOnAdd();
-
-            modelBuilder.Entity<Meal>()
-                .Property(m => m.MealTypes)
-                .HasConversion(new EnumCollectionJsonValueConverter<MealType>())
-                .Metadata.SetValueComparer(new CollectionValueComparer<MealType>());
                 
             modelBuilder.Entity<Meal>()
                 .HasKey(m => m.Id);
 
             modelBuilder.Entity<Meal>()
                 .HasMany(m => m.GroceryListItems)
-                .WithOne(gli => gli.Meal)
+                .WithOne()
                 .HasForeignKey(gli => gli.MealId);
         }
     }
