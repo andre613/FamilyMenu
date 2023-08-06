@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Blazored.Toast" Version="4.0.0" />
+    <PackageReference Include="Blazored.Toast" Version="4.1.0" />
+    <PackageReference Include="Radzen.Blazor" Version="4.14.4" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FamilyPlanner.api\FamilyPlanner.api.csproj" />
+    <ProjectReference Include="..\FamilyPlanner.Common\FamilyPlanner.Common.csproj" />
   </ItemGroup>
 
 </Project>

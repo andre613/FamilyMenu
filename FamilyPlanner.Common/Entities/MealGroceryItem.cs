@@ -2,7 +2,7 @@
 
 namespace FamilyPlanner.Common.Entities
 {
-    public class GroceryListItem : BaseEntity
+    public class MealGroceryItem : BaseEntity
     {
         [Required]
         public string Description { get; set; } = null!;

@@ -46,14 +46,14 @@ namespace FamilyPlanner.Common.Entities
             modelBuilder.Entity<GroceryItem>()
                 .HasKey(gi => gi.Id);
 
-            modelBuilder.Entity<GroceryListItem>()
+            modelBuilder.Entity<MealGroceryItem>()
                 .Property(gli => gli.Id)
                 .ValueGeneratedOnAdd();
 
-            modelBuilder.Entity<GroceryListItem>()
+            modelBuilder.Entity<MealGroceryItem>()
                 .HasKey(gli => gli.Id);
 
-            modelBuilder.Entity<GroceryListItem>()
+            modelBuilder.Entity<MealGroceryItem>()
                 .HasOne(gli => gli.GroceryItem)
                 .WithMany()
                 .HasForeignKey(gli => gli.GroceryItemId);

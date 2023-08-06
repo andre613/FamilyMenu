@@ -1,0 +1,60 @@
+﻿@page "/meals/{mealId:int}/edit"
+
+@using FamilyPlanner.UI.Components
+@using FamilyPlanner.Common.Entities;
+@using FamilyPlanner.UI.Services;
+
+@inject IMealService MealService;
+@inject IToastService ToastService;
+@inject NavigationManager NavigationManager;
+@inject IJSRuntime JSRuntime;
+
+<PageTitle>Edit Meal: @_meal.Name</PageTitle>
+<h1>Edit Meal: @_meal.Name</h1>
+
+<MealForm Meal="_meal" OnCancel="Cancel" OnSubmit="SaveMeal" />
+
+@code {
+    private Meal _meal = new();
+
+    [Parameter]
+    public int MealId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _meal = (await MealService.GetMeal(Convert.ToUInt32(MealId)))!;
+        }
+        catch(NotFoundException<Meal> ex)
+        {
+            ToastService.ShowError(ex.Message);
+            NavigationManager.NavigateTo("/NotFound");
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+            NavigationManager.NavigateTo("/Home");
+        }
+    }
+
+    private async void Cancel()
+    {
+        await JSRuntime.InvokeVoidAsync("history.back");
+    }
+
+    private async Task SaveMeal()
+    {
+        try
+        {
+            _meal = (await MealService.UpdateMeal(_meal));
+            ToastService.ShowSuccess($"{_meal.Name} Saved.");
+            Cancel();
+        }
+        catch(Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+            Cancel();
+        }
+    }
+}

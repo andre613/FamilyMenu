@@ -51,7 +51,7 @@ namespace FamilyPlanner.api.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateTable(
-                name: "GroceryListItem",
+                name: "MealGroceryItem",
                 columns: table => new
                 {
                     Id = table.Column<uint>(type: "int unsigned", nullable: false)
@@ -64,15 +64,15 @@ namespace FamilyPlanner.api.Data.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_GroceryListItem", x => x.Id);
+                    table.PrimaryKey("PK_MealGroceryItem", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_GroceryListItem_GroceryItem_GroceryItemId",
+                        name: "FK_MealGroceryItem_GroceryItem_GroceryItemId",
                         column: x => x.GroceryItemId,
                         principalTable: "GroceryItem",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_GroceryListItem_Meals_MealId",
+                        name: "FK_MealGroceryItem_Meals_MealId",
                         column: x => x.MealId,
                         principalTable: "Meals",
                         principalColumn: "Id");
@@ -80,13 +80,13 @@ namespace FamilyPlanner.api.Data.Migrations
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GroceryListItem_GroceryItemId",
-                table: "GroceryListItem",
+                name: "IX_MealGroceryItem_GroceryItemId",
+                table: "MealGroceryItem",
                 column: "GroceryItemId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_GroceryListItem_MealId",
-                table: "GroceryListItem",
+                name: "IX_MealGroceryItem_MealId",
+                table: "MealGroceryItem",
                 column: "MealId");
         }
 
@@ -94,7 +94,7 @@ namespace FamilyPlanner.api.Data.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "GroceryListItem");
+                name: "MealGroceryItem");
 
             migrationBuilder.DropTable(
                 name: "GroceryItem");

@@ -1,13 +1,12 @@
 ﻿using AutoFixture;
 using FamilyPlanner.api.Controllers;
-using FamilyPlanner.Common.Entities;
 using FamilyPlanner.api.Repositories;
-using Moq;
-using FamilyPlanner.api.Tests.Helpers;
 using FamilyPlanner.api.Repositories.Implementations;
-using Microsoft.AspNetCore.Mvc;
+using FamilyPlanner.api.Tests.Helpers;
+using FamilyPlanner.Common.Entities;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
+using Moq;
 
 namespace FamilyPlanner.api.Tests.Controllers
 {

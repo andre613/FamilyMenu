@@ -25,6 +25,6 @@ namespace FamilyPlanner.Common.Entities
 
         public MealType? MealType { get; set; } = null;
 
-        public virtual IList<GroceryListItem> GroceryListItems { get; set; } = new List<GroceryListItem>();
+        public virtual IList<MealGroceryItem> GroceryListItems { get; set; } = new List<MealGroceryItem>();
     }
 }

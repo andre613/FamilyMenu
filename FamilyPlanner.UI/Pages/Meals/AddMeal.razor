@@ -1,0 +1,42 @@
+﻿@page "/meals/add"
+
+@using FamilyPlanner.UI.Components
+@using FamilyPlanner.UI.Services;
+@using FamilyPlanner.Common.Entities;
+@using FamilyPlanner.UI.Helpers;
+@using System.Collections.Generic;
+@using System.Linq;
+
+@inject IMealService MealService;
+@inject IToastService ToastService;
+@inject NavigationManager NavigationManager;
+
+<PageTitle>Add New Meal</PageTitle>
+
+<h1>Add New Meal</h1>
+
+<MealForm Meal="_meal" OnCancel="Cancel" OnSubmit="SaveMeal" />
+
+@code 
+{
+    private Meal _meal = new();
+
+    private async Task SaveMeal()
+    {
+        try
+        {
+            _meal = (await MealService.AddMeal(_meal))!;
+            ToastService.ShowSuccess($"{_meal.Name} Saved.");
+            NavigationManager.NavigateTo($"/Meals/{_meal.Id}");
+        }
+        catch(Exception e)
+        {
+            ToastService.ShowError(e.Message);
+        }
+    }
+
+    private void Cancel()
+    {
+        NavigationManager.NavigateTo("/home");
+    }
+}
