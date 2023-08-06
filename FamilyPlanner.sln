@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FamilyPlanner.api.Tests", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FamilyPlanner.UI.Tests", "FamilyPlanner.UI.Tests\FamilyPlanner.UI.Tests.csproj", "{AEFE39DA-733F-4A24-989F-76614C216E96}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FamilyPlanner.Common", "FamilyPlanner.Common\FamilyPlanner.Common.csproj", "{8CC1B4CD-DA69-4943-9823-E8C436F8DDA6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FamilyPlanner.Common", "FamilyPlanner.Common\FamilyPlanner.Common.csproj", "{8CC1B4CD-DA69-4943-9823-E8C436F8DDA6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,0 +1,48 @@
+﻿@page "/meals"
+
+@using FamilyPlanner.Common.Entities;
+@using FamilyPlanner.UI.Services;
+
+@inject IMealService MealService;
+@inject IToastService ToastService;
+@inject NavigationManager NavigationManager;
+
+<h3>Meals</h3>
+
+<RadzenDataGrid 
+    AllowFiltering="true" 
+    AllowColumnResize="true" 
+    AllowAlternatingRows="true" 
+    FilterMode="FilterMode.Advanced" 
+    AllowSorting="true" 
+    PageSize="5" 
+    AllowPaging="true" 
+    PagerHorizontalAlign="HorizontalAlign.Left" 
+    ShowPagingSummary="true" 
+    Data="@_meals" 
+    TItem="Meal" 
+    ColumnWidth="300px" 
+    LogicalFilterOperator="LogicalFilterOperator.Or">
+    <Columns>
+        <RadzenDataGridColumn TItem="Meal" Property="Id" Filterable="false" Title="ID" Frozen="true" Width="80px" TextAlign="TextAlign.Center" />
+        <RadzenDataGridColumn TItem="Meal" Property="Name" Title="Meal Name" Frozen="true" Width="160px" />
+        <RadzenDataGridColumn TItem="Meal" Property="Description" Title="Description" Width="160px" />
+    </Columns>
+</RadzenDataGrid>
+
+@code {
+    private List<Meal> _meals = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _meals = await MealService.GetMeals();
+        }
+        catch (Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+            NavigationManager.NavigateTo("/Home");
+        }
+    }
+}

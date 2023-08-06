@@ -1,0 +1,42 @@
+﻿@page "/meals/{mealId:int}"
+
+@using FamilyPlanner.Common.Entities;
+@using FamilyPlanner.UI.Services;
+
+@inject IMealService MealService;
+@inject IToastService ToastService;
+@inject NavigationManager NavigationManager;
+
+<h3>@_meal.Name</h3>
+
+Description: @_meal.Description
+<br />
+URL: @_meal.RecipeUri
+<br />
+Meal Type: @_meal.MealType
+
+@code 
+{
+    private Meal _meal = new();
+
+    [Parameter]
+    public int MealId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            _meal = (await MealService.GetMeal(Convert.ToUInt32(MealId)))!;
+        }
+        catch(NotFoundException<Meal> ex)
+        {
+            ToastService.ShowError(ex.Message);
+            NavigationManager.NavigateTo("/NotFound");
+        }
+        catch(Exception ex)
+        {
+            ToastService.ShowError(ex.Message);
+            NavigationManager.NavigateTo("/Home");
+        }
+    }
+}

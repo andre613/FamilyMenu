@@ -6,6 +6,8 @@ namespace FamilyPlanner.api.Repositories
     {
         ICollection<T> GetAll();
 
+        T GetById(uint Id);
+
         T Add(T entity);
 
         T Update(T entity);

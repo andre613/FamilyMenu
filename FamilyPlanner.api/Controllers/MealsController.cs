@@ -1,8 +1,7 @@
-﻿using FamilyPlanner.Common.Entities;
-using FamilyPlanner.api.Repositories;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http.HttpResults;
+﻿using FamilyPlanner.api.Repositories;
 using FamilyPlanner.api.Repositories.Implementations;
+using FamilyPlanner.Common.Entities;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FamilyPlanner.api.Controllers
 {
@@ -17,12 +16,32 @@ namespace FamilyPlanner.api.Controllers
             _mealRepository = mealRepository;
         }
 
-        [HttpGet(Name ="GetMeals")]
+        [HttpGet(Name = "GetMeals")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public ActionResult<List<Meal>> GetMeals() 
         {
             var meals = _mealRepository.GetAll().ToList();
             return Ok(meals);
+        }
+
+        [HttpGet("{mealId}", Name = "GetMealsById")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public ActionResult<Meal> GetMealById(uint mealId)
+        {
+            try
+            {
+                return Ok(_mealRepository.GetById(mealId));
+            }
+            catch(EntityNotFoundException<Meal> ex)
+            {
+                return NotFound(new ProblemDetails 
+                { 
+                    Detail = ex.Message,
+                    Status = StatusCodes.Status404NotFound,
+                    Title = "Not found"
+                });
+            }
         }
 
         [HttpPost(Name = "PostMeal")]
@@ -41,7 +60,12 @@ namespace FamilyPlanner.api.Controllers
             }
             catch(EntityNotFoundException<Meal> ex)
             {
-                return NotFound(new { meal.Id, error = ex.Message});
+                return NotFound(new ProblemDetails
+                {
+                    Detail = ex.Message,
+                    Status = StatusCodes.Status404NotFound,
+                    Title = "Not Found"
+                });
             }
         }
     }

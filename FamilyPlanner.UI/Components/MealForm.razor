@@ -1,0 +1,104 @@
+﻿@using FamilyPlanner.Common.Entities;
+@using System.Linq;
+@using FamilyPlanner.UI.Helpers;
+
+<EditForm Model="@Meal" OnValidSubmit="InvokeOnSubmit">
+
+    <DataAnnotationsValidator />
+
+    <div class="mb-3">
+        <label for="Name" class="form-label">Name</label>
+
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="Meal.Name" />
+        </div>
+
+        <ValidationMessage For="@(() => Meal.Name)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="Description" class="form-label">Description</label>
+
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="Meal.Description" />
+        </div>
+
+        <ValidationMessage For="@(() => Meal.Description)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="RecipeUri" class="form-label">Recipe URL</label>
+
+        <div class="col-md-4">
+            <InputText class="form-control" @bind-Value="Meal.RecipeUri" />
+        </div>
+
+        <ValidationMessage For="@(() => Meal.RecipeUri)" />
+    </div>
+
+    <div class="mb-3">
+        <label for="MealTypes" class="form-label">Meal Type(s)</label>
+
+        <div class="col-md-4">
+            @foreach (var mealType in _availableMealTypes)
+            {
+                <label for="mealType" class="form-label">
+                    @mealType.EnumValue.ToString()
+                    <InputCheckbox @bind-Value="mealType.IsChecked" />
+                </label>
+
+                <br />
+            }
+        </div>
+
+        <ValidationMessage For="@(() => Meal.MealType)" />
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary">Save</button>
+        <button class="btn btn-light" @onclick="InvokeOnCancel">Cancel</button>
+    </div>
+</EditForm>
+
+@code 
+{
+    private Meal _meal = null!;
+
+    [Parameter, EditorRequired]
+    public Meal Meal 
+    { 
+        get => _meal;
+        set
+        { 
+            _meal = value;
+            SetupMealTypes();
+        }
+    }
+
+    [Parameter, EditorRequired]
+    public Func<Task> OnSubmit { get; set; } = null!;
+
+    [Parameter, EditorRequired]
+    public Action OnCancel { get; set; } = null!;
+
+    private List<CheckableEnum<MealType>> _availableMealTypes = Enum.GetValues(typeof(MealType))
+        .Cast<MealType>()
+        .Select(mt => new CheckableEnum<MealType>() { EnumValue = mt })
+        .ToList();
+
+    private void InvokeOnSubmit()
+    {
+        Meal.MealType = (MealType)_availableMealTypes.Where(smt => smt.IsChecked)?.Sum(smt => (long?)smt.EnumValue)!;
+        OnSubmit?.Invoke();
+    }
+
+    private void InvokeOnCancel()
+    {
+        OnCancel?.Invoke();
+    }
+
+    private void SetupMealTypes()
+    {
+        _availableMealTypes.ForEach(amt => amt.IsChecked = Meal.MealType.HasValue && Meal.MealType.Value.HasFlag(amt.EnumValue));
+    }
+}
